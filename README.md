@@ -1,77 +1,11 @@
-# Docker SDK for Python
+This is a fork of docker/docker-py and used to facilitate the v2 API work of libpod.
+Some integration tests of docker-py will fail for various reasons (e.g., different error message); fixing these may not be possible in all cases.
+Hence, we need to adjust certain tests in order to make them pass.
 
-[![Build Status](https://travis-ci.org/docker/docker-py.svg?branch=master)](https://travis-ci.org/docker/docker-py)
+Run `make build-container-image` to build the `quay.io/libpod/docker-py:latest` image locally.
 
-A Python library for the Docker Engine API. It lets you do anything the `docker` command does, but from within Python apps – run containers, manage containers, manage Swarms, etc.
+Run `make shell` to run the container and get a shell.
+Note that `make shell` mounts the current working directory to `/src` allowing to edit and adjust the tests on the host while running them in the container.
 
-## Installation
-
-The latest stable version [is available on PyPI](https://pypi.python.org/pypi/docker/). Either add `docker` to your `requirements.txt` file or install with pip:
-
-    pip install docker
-
-If you are intending to connect to a docker host via TLS, add `docker[tls]` to your requirements instead, or install with pip:
-
-    pip install docker[tls]
-
-## Usage
-
-Connect to Docker using the default socket or the configuration in your environment:
-
-```python
-import docker
-client = docker.from_env()
-```
-
-You can run containers:
-
-```python
->>> client.containers.run("ubuntu:latest", "echo hello world")
-'hello world\n'
-```
-
-You can run containers in the background:
-
-```python
->>> client.containers.run("bfirsh/reticulate-splines", detach=True)
-<Container '45e6d2de7c54'>
-```
-
-You can manage containers:
-
-```python
->>> client.containers.list()
-[<Container '45e6d2de7c54'>, <Container 'db18e4f20eaa'>, ...]
-
->>> container = client.containers.get('45e6d2de7c54')
-
->>> container.attrs['Config']['Image']
-"bfirsh/reticulate-splines"
-
->>> container.logs()
-"Reticulating spline 1...\n"
-
->>> container.stop()
-```
-
-You can stream logs:
-
-```python
->>> for line in container.logs(stream=True):
-...   print line.strip()
-Reticulating spline 2...
-Reticulating spline 3...
-...
-```
-
-You can manage images:
-
-```python
->>> client.images.pull('nginx')
-<Image 'nginx'>
-
->>> client.images.list()
-[<Image 'ubuntu'>, <Image 'nginx'>, ...]
-```
-
-[Read the full documentation](https://docker-py.readthedocs.io) to see everything you can do.
+Run `make test` to run all integration tests.
+Use the `$TEST` environment variable to control which tests are being executed, e.g., `TEST="tests/integration/api_container_test.py::ListContainersTest make test`.
