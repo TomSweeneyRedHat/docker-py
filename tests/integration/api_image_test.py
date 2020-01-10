@@ -72,7 +72,8 @@ class PullImageTest(BaseAPIIntegrationTest):
         # Some API versions incorrectly returns 500 status; assert 4xx or 5xx
         assert excinfo.value.is_error()
         assert 'unknown operating system' in excinfo.exconly() \
-               or 'invalid platform' in excinfo.exconly()
+               or 'invalid platform' in excinfo.exconly() \
+               or 'image found in manifest list for architecture' in excinfo.exconly()
 
 
 class CommitTest(BaseAPIIntegrationTest):
