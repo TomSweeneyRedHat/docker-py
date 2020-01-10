@@ -24,5 +24,5 @@ test:
 	$(eval testLogs=$(shell mktemp))
 	@echo "Test logs at $(testLogs)"
 	@echo "Use the TEST env var to control which tests are being run, for instance:"
-	@echo "    DOCKERPY_TEST="tests/integration/api_container_test.py::ListContainersTest"
+	@echo "    TEST=tests/integration/api_container_test.py::ListContainersTest"
 	$(CTR_ENGINE) $(CTR_COMMAND) $(CTR_IMAGE) sh -c "pytest $(TEST)"
